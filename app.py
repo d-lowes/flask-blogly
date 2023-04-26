@@ -16,18 +16,27 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 
 @app.get("/")
-def redirect():
+def home_page():
    """redirect to /users"""
 
-   return render_template("home.html")
+   return redirect("/users")
 
 @app.get("/users")
 def show_users():
    """render users.html w/ list of all users"""
 
-   return render_template("users.html")
+   # get the user from the table and add to users
+   users = [
+      {"first_name": "jane", "last_name": "smith"},
+      {"first_name": "jane", "last_name": "smith"}
+      ]
+
+   return render_template("users.html", users = users)
+
+@app.get("/users/new")
+def new_user():
+   """Display an add form ; submit the form data and return back to users page"""
 
 
-# @app.post("/")
-# def something():
-#    """Fill in later"""
+
+

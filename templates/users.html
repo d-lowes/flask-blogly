@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {{ for user in users }}
+
+
+  {{ endfor }}
+  <form action="/users/new" method="GET">
+    <button id="add-user" type="submit">add user</button>
+  </form>
+
+
+
+{% endblock %}

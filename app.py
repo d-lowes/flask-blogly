@@ -16,10 +16,17 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 
 @app.get("/")
-def show_homePage():
-   """Display Home Page"""
+def redirect():
+   """redirect to /users"""
 
    return render_template("home.html")
+
+@app.get("/users")
+def show_users():
+   """render users.html w/ list of all users"""
+
+   return render_template("users.html")
+
 
 # @app.post("/")
 # def something():

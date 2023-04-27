@@ -48,7 +48,7 @@ def new_user_form():
     """submit new user form to user's class"""
     first_name = request.form["first_name"]
     last_name = request.form["last_name"]
-    image_url = request.form["image_URL"]
+    image_url = request.form["image_url"]
 
     user = User(first_name=first_name,
                 last_name=last_name,
@@ -86,7 +86,7 @@ def save_user_edit(id):
 
     user.first_name = request.form["first_name"]
     user.last_name = request.form["last_name"]
-    user.image_url = request.form["image_URL"]
+    user.image_url = request.form["image_url"]
 
     db.session.add(user)
     db.session.commit()

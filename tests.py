@@ -37,7 +37,7 @@ class UserViewTestCase(TestCase):
         test_user = User(
             first_name="test1_first",
             last_name="test1_last",
-            image_url=None,
+            image_url="www.yahoo.com",
         )
 
         db.session.add(test_user)
@@ -60,3 +60,15 @@ class UserViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
             self.assertIn("test1_first", html)
             self.assertIn("test1_last", html)
+
+    def test_add_user(self):
+        with self.client as client:
+            resp = client.post("/users/new",
+                               data = {"first_name": "test2_first",
+                                        "last_name": "test1_last",
+                                        "image_url": "www.google.com"})
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("test2_first", html)
+            self.assertIn("test2_last", html)
+            self.assertIn("www.google.com", html)

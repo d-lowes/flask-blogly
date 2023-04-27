@@ -3,38 +3,39 @@
 from flask_sqlalchemy import SQLAlchemy
 
 
-db = SQLAlchemy() #create a SQLAlchemy instance
-#create a function that ties your db object to your app object
-#thus, allows your flask app to connect to the specified db
+db = SQLAlchemy()  # create a SQLAlchemy instance
+# create a function that ties your db object to your app object
+# thus, allows your flask app to connect to the specified db
+
+
 def connect_db(app):
-   """Connect to database."""
-   app.app_context().push()
-   db.app = app
-   db.init_app(app)
+    """Connect to database."""
+    app.app_context().push()
+    db.app = app
+    db.init_app(app)
+
 
 class User(db.Model):
-   """User"""
+    """User"""
 
+    __tablename__ = "users"
 
-   __tablename__ = "users"
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True)
 
+    first_name = db.Column(
+        db.String(50),
+        nullable=False,
+        unique=True)
 
-   id = db.Column(
-       db.Integer,
-       primary_key=True,
-       autoincrement=True)
+    last_name = db.Column(
+        db.String(50),
+        nullable=False,
+        unique=True)
 
-   first_name = db.Column(
-       db.String(50),
-       nullable=False,
-       unique=True)
-
-   last_name = db.Column(
-       db.String(50),
-       nullable=False,
-       unique=True)
-
-   image_url = db.Column(
-       db.String(255),
-       nullable=False,
-       unique=True)
+    image_url = db.Column(
+        db.String(255),
+        nullable=False,
+        unique=True)

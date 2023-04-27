@@ -15,11 +15,13 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 
+
 @app.get("/")
 def home_page():
     """redirect to /users"""
 
     return redirect("/users")
+
 
 @app.get("/users")
 def show_users():
@@ -28,13 +30,15 @@ def show_users():
     # get the user from the table and add to users
     users = User.query.all()
 
-    return render_template("users.html", users = users)
+    return render_template("users.html", users=users)
+
 
 @app.get("/users/new")
 def new_user():
     """Display an add form ; submit the form data and return back to users page"""
 
     return render_template("new_users.html")
+
 
 @app.post("/users/new")
 def new_user_form():
@@ -43,10 +47,21 @@ def new_user_form():
     last_name = request.form["last_name"]
     image_url = request.form["image_URL"]
 
-    user = User(first_name = first_name,
-                last_name = last_name,
-                image_url = image_url)
+    user = User(first_name=first_name,
+                last_name=last_name,
+                image_url=image_url)
     db.session.add(user)
     db.session.commit()
 
     return redirect("/users")
+
+
+@app.get("/users/<int:id>")
+def show_user(id):
+    """Display info about the current user, with edit page and delete user
+    options"""
+
+    user = User.query.get(id)
+
+    return render_template("user_detail.html", user = user)
+

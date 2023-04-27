@@ -65,3 +65,12 @@ def show_user(id):
 
     return render_template("user_detail.html", user = user)
 
+
+@app.get("/users/<int:id>/edit")
+def edit_user(id):
+    """Show edit page for user"""
+
+    user = User.query.get(id)
+
+    return render_template("edit_user.html", user = user)
+

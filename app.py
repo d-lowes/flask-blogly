@@ -30,7 +30,7 @@ def home_page():
 def show_users():
     """render users.html w/ list of all users"""
 
-    # get the user from the table and add to users
+    # TODO: add order by to users
     users = User.query.all()
 
     return render_template("users.html", users=users)
@@ -46,9 +46,10 @@ def new_user():
 @app.post("/users/new")
 def new_user_form():
     """submit new user form to user's class"""
+
     first_name = request.form["first_name"]
     last_name = request.form["last_name"]
-    image_url = request.form["image_url"]
+    image_url = request.form["image_url"] or None
 
     user = User(first_name=first_name,
                 last_name=last_name,
@@ -56,6 +57,7 @@ def new_user_form():
 
     db.session.add(user)
     db.session.commit()
+    #TODO: flash message user added
 
     return redirect("/users")
 
@@ -67,7 +69,7 @@ def show_user(id):
 
     user = User.query.get_or_404(id)
 
-    return render_template("user_detail.html", user = user)
+    return render_template("user_detail.html", user=user)
 
 
 @app.get("/users/<int:id>/edit")
@@ -76,7 +78,8 @@ def edit_user(id):
 
     user = User.query.get_or_404(id)
 
-    return render_template("edit_user.html", user = user)
+    return render_template("edit_user.html", user=user)
+
 
 @app.post("/users/<int:id>/edit")
 def save_user_edit(id):
@@ -92,6 +95,7 @@ def save_user_edit(id):
     db.session.commit()
 
     return redirect("/users")
+
 
 @app.post("/users/<int:id>/delete")
 def delete_user(id):

@@ -37,7 +37,7 @@ class UserViewTestCase(TestCase):
         test_user = User(
             first_name="test1_first",
             last_name="test1_last",
-            image_url="www.yahoo.com",
+            image_url=None,
         )
 
         db.session.add(test_user)
@@ -64,11 +64,39 @@ class UserViewTestCase(TestCase):
     def test_add_user(self):
         with self.client as client:
             resp = client.post("/users/new",
-                               data = {"first_name": "test2_first",
-                                        "last_name": "test1_last",
-                                        "image_url": "www.google.com"})
+                                data = {
+                                   "first_name": "test2_first",
+                                    "last_name": "test2_last",
+                                    "image_url": ""
+                                    },
+                                    follow_redirects=True
+                                )
             self.assertEqual(resp.status_code, 200)
             html = resp.get_data(as_text=True)
             self.assertIn("test2_first", html)
             self.assertIn("test2_last", html)
-            self.assertIn("www.google.com", html)
+
+    def test_edit_user(self):
+        with self.client as client:
+            resp = client.post(f"/users/{self.user_id}/edit",
+                               data = {
+                                    "first_name": "test3_first",
+                                    "last_name": "test3_last",
+                                    "image_url": ""
+                                },
+                                follow_redirects=True
+                               )
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn("test3_first", html)
+            self.assertIn("test3_last", html)
+
+    def test_delete_user(self):
+        with self.client as client:
+            resp = client.post(f"/users/{self.user_id}/delete",
+                                follow_redirects=True
+                               )
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertNotIn("test3_first", html)
+            self.assertNotIn("test3_last", html)

@@ -39,11 +39,13 @@ def new_user():
 @app.post("/users/new")
 def new_user_form():
     """submit new user form to user's class"""
-    first_name = request.form["firstName"]
-    last_name = request.form["lastName"]
-    image_url = request.form["imageURL"]
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
+    image_url = request.form["image_URL"]
 
-    user = User(first_name, last_name, image_url)
+    user = User(first_name = first_name,
+                last_name = last_name,
+                image_url = image_url)
     db.session.add(user)
     db.session.commit()
 

@@ -7,11 +7,14 @@ from models import connect_db, db, User
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = "secret"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///blogly')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
+
+# debug = DebugToolbarExtension(app)
 
 connect_db(app)
 
@@ -50,6 +53,7 @@ def new_user_form():
     user = User(first_name=first_name,
                 last_name=last_name,
                 image_url=image_url)
+
     db.session.add(user)
     db.session.commit()
 
@@ -61,7 +65,7 @@ def show_user(id):
     """Display info about the current user, with edit page and delete user
     options"""
 
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
 
     return render_template("user_detail.html", user = user)
 
@@ -70,7 +74,32 @@ def show_user(id):
 def edit_user(id):
     """Show edit page for user"""
 
-    user = User.query.get(id)
+    user = User.query.get_or_404(id)
 
     return render_template("edit_user.html", user = user)
 
+@app.post("/users/<int:id>/edit")
+def save_user_edit(id):
+    """Process the edit form and redirect to the user page"""
+
+    user = User.query.get_or_404(id)
+
+    user.first_name = request.form["first_name"]
+    user.last_name = request.form["last_name"]
+    user.image_url = request.form["image_URL"]
+
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect("/users")
+
+@app.post("/users/<int:id>/delete")
+def delete_user(id):
+    """Delete the user"""
+
+    user = User.query.get_or_404(id)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect("/users")

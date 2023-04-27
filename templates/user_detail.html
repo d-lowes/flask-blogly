@@ -3,11 +3,15 @@
 {% block content %}
 
 <!-- display img rendered -->
-<h2>{{ user.first_name }} {{ user.last_name }}</h2>
-<form action="/users/{{ user.id }}/edit" id="editUser">
-  <button type="submit" id="editBtn" class="btn btn-primary">Edit</button>
-</form>
-<form action="/users/{{ user.id }}/delete" id="editUser">
-  <button type="submit" id="editBtn" class="btn btn-danger">Delete</button>
-</form>
+<div class="container-fluid">
+  <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+  <div class="row">
+    <form action="/users/{{ user.id }}/edit" id="editUser">
+      <button type="submit" id="editBtn" class="btn btn-primary">Edit</button>
+    </form>
+    <form action="/users/{{ user.id }}/delete" id="editUser" method="POST">
+      <button type="submit" id="editBtn" class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

@@ -17,26 +17,34 @@ connect_db(app)
 
 @app.get("/")
 def home_page():
-   """redirect to /users"""
+    """redirect to /users"""
 
-   return redirect("/users")
+    return redirect("/users")
 
 @app.get("/users")
 def show_users():
-   """render users.html w/ list of all users"""
+    """render users.html w/ list of all users"""
 
-   # get the user from the table and add to users
-   users = [
-      {"first_name": "jane", "last_name": "smith"},
-      {"first_name": "jane", "last_name": "smith"}
-      ]
+    # get the user from the table and add to users
+    users = User.query.all()
 
-   return render_template("users.html", users = users)
+    return render_template("users.html", users = users)
 
 @app.get("/users/new")
 def new_user():
-   """Display an add form ; submit the form data and return back to users page"""
+    """Display an add form ; submit the form data and return back to users page"""
 
+    return render_template("new_users.html")
 
+@app.post("/users/new")
+def new_user_form():
+    """submit new user form to user's class"""
+    first_name = request.form["firstName"]
+    last_name = request.form["lastName"]
+    image_url = request.form["imageURL"]
 
+    user = User(first_name, last_name, image_url)
+    db.session.add(user)
+    db.session.commit()
 
+    return redirect("/users")
